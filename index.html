@@ -1,251 +1,87 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Smart Home Dashboard — Futuristic Edition</title>
-
-  <!-- Core styles (merged) -->
-  <link rel="stylesheet" href="style.css">
-
-  <!-- Third-party animation libs (non-blocking) -->
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js" defer></script>
-
-  <!-- Animations layer (safe, non-destructive) -->
-  <script src="animations.js" defer></script>
-
-  <!-- Keep your original working Firebase script exactly as uploaded (do not change) -->
-  <!-- local uploaded file path used as script src to ensure no change to behavior -->
-  <script type="module" src="/mnt/data/script.js" defer></script>
-
-  <meta name="description" content="AI-Driven Smart Home Dashboard - Futuristic animated edition.">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Smart Home Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-  <!-- ------------------ decorative layered background (pointer-events: none) ------------------ -->
-  <div id="animBack" aria-hidden="true">
-    <canvas id="tsparticles-canvas" class="particles-canvas"></canvas>
-    <div id="blob-layer" class="blob-layer"></div>
+    <h1 class="title">AI-Driven Smart Home Automation</h1>
 
-    <!-- floating Lottie objects -->
-    <div id="floating-objects" aria-hidden="true">
-      <div class="lottie" data-src="https://assets1.lottiefiles.com/packages/lf20_tutvdkg0.json"></div>
-      <div class="lottie" data-src="https://assets1.lottiefiles.com/packages/lf20_jz9p4c7b.json"></div>
+    <!-- MODE BLOCK -->
+    <div class="mode-box">
+        <h2>Mode</h2>
+        <div id="modeStatus" class="status-text">AUTO</div>
+        <button class="mode-btn" onclick="setMode('AUTO')">AUTO</button>
+        <button class="mode-btn" onclick="setMode('MANUAL')">MANUAL</button>
     </div>
 
-    <!-- holographic grid -->
-    <svg id="holoGrid" width="100%" height="100%" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="g1" x1="0" x2="1">
-          <stop offset="0" stop-color="#ff8bd8" stop-opacity="0.05"/>
-          <stop offset="1" stop-color="#71f3ff" stop-opacity="0.05"/>
-        </linearGradient>
-      </defs>
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#g1)"></rect>
-    </svg>
-  </div>
+    <!-- MAIN APPLIANCES -->
+    <div class="grid">
 
-  <!-- ------------------ Sidebar (futuristic) ------------------ -->
-  <aside id="sidebar" class="sidebar">
-    <div class="brand">
-      <div class="brand-logo">🔷</div>
-      <div class="brand-text">
-        <h1>SMART HOME</h1>
-        <p>AI • IoT • Edge</p>
-      </div>
-    </div>
-
-    <nav class="nav">
-      <button class="nav-btn active">Dashboard</button>
-      <button class="nav-btn">Analytics</button>
-      <button class="nav-btn">Events</button>
-      <button class="nav-btn">Devices</button>
-      <button class="nav-btn">Settings</button>
-      <a class="doc-link" href="/mnt/data/AI_Driven_Smart_Home_Project_Documentation.pdf" target="_blank">Project Docs (PDF)</a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <div class="status-pill">
-        <span class="dot online"></span> Online
-      </div>
-      <small class="copyright">© MetaINNOVA</small>
-    </div>
-  </aside>
-
-  <!-- ------------------ Main content ------------------ -->
-  <main id="main" class="main">
-
-    <!-- topbar -->
-    <header class="topbar">
-      <div class="title">
-        <h2 class="title-main">Dashboard</h2>
-        <p class="title-sub">AI-driven Smart Home — Futuristic Presentation</p>
-      </div>
-
-      <div class="top-actions">
-        <div class="search">
-          <input id="searchBox" placeholder="Search devices, logs, events..." />
-        </div>
-        <button class="btn neon">New Alert</button>
-        <div class="avatar">AGM</div>
-      </div>
-    </header>
-
-    <!-- info + occupancy row -->
-    <section class="row row-top">
-      <!-- left: large system summary card -->
-      <div class="card card-large system-summary">
-        <div class="card-header">
-          <h3>System Summary</h3>
-          <div class="mini-chip">Live</div>
+        <!-- FAN -->
+        <div class="card">
+            <h3>Fan</h3>
+            <div id="fanStatus" class="status-text">OFF</div>
+            <button onclick="setFan('ON')">Turn ON</button>
+            <button onclick="setFan('OFF')">Turn OFF</button>
         </div>
 
-        <div class="system-grid">
-          <div class="status-tile">
-            <h4>Mode</h4>
-            <div class="status-value" id="modeStatus">--</div>
-          </div>
+        <!-- LIGHT -->
+        <div class="card">
+            <h3>Main Light</h3>
+            <div id="lightStatus" class="status-text">OFF</div>
+            <button onclick="setLight('ON')">Turn ON</button>
+            <button onclick="setLight('OFF')">Turn OFF</button>
+        </div>
 
-          <div class="status-tile">
-            <h4>AI State</h4>
-            <div class="status-value ai-box" id="aiStatus">--</div>
-          </div>
+        <!-- PIR LIGHT -->
+        <div class="card">
+            <h3>Motion Light</h3>
+            <div id="pirLightStatus" class="status-text">OFF</div>
+            <button onclick="setPirLight('ON')">Turn ON</button>
+            <button onclick="setPirLight('OFF')">Turn OFF</button>
+        </div>
 
-          <div class="status-tile">
-            <h4>Gas Sensor</h4>
-            <div class="status-value" id="gasVal">--</div>
-          </div>
+    </div>
 
-          <div class="status-tile">
+    <!-- SENSOR GRID -->
+    <h2 class="sec-title">Sensor Readings</h2>
+    <div class="sensor-grid">
+
+        <div class="sensor-card">
             <h4>Temperature</h4>
-            <div class="status-value" id="tempVal">--</div>
-          </div>
+            <div id="tempVal" class="sensor-value">--</div>
+        </div>
 
-          <div class="status-tile">
-            <h4>Ambient Light</h4>
-            <div class="status-value" id="lightVal">--</div>
-          </div>
+        <div class="sensor-card">
+            <h4>Light</h4>
+            <div id="lightVal" class="sensor-value">--</div>
+        </div>
 
-          <div class="status-tile">
+        <div class="sensor-card">
             <h4>Motion</h4>
-            <div class="status-value" id="motionVal">--</div>
-          </div>
+            <div id="motionVal" class="sensor-value">--</div>
         </div>
 
-        <div class="card-footer">
-          <small>Last sync: <span id="lastSync">--:--</span></small>
-          <div class="sparkline" id="sparkEnergy"></div>
-        </div>
-      </div>
-
-      <!-- right: small live tiles -->
-      <div class="col col-sm">
-        <div class="card sensor-card">
-          <h4>Light</h4>
-          <div class="big" id="lightStatus">--</div>
-          <div class="card-actions"><button class="btn small">Toggle</button></div>
+        <div class="sensor-card">
+            <h4>Gas</h4>
+            <div id="gasVal" class="sensor-value">--</div>
         </div>
 
-        <div class="card sensor-card">
-          <h4>Fan</h4>
-          <div class="big" id="fanStatus">--</div>
-          <div class="card-actions"><button class="btn small">Toggle</button></div>
-        </div>
+    </div>
 
-        <div class="card sensor-card">
-          <h4>PIR Light</h4>
-          <div class="big" id="pirLightStatus">--</div>
-          <div class="card-actions"><button class="btn small">Test</button></div>
-        </div>
-      </div>
-    </section>
+    <!-- AI STATUS -->
+    <h2 class="sec-title">AI Decision Status</h2>
+    <div class="ai-box">
+        <div id="aiStatus">Waiting...</div>
+    </div>
 
-    <!-- ------------------ sensors / logs / interactive widgets row ------------------ -->
-    <section class="row row-mid">
+    <!-- Firebase + Script -->
+    <script type="module" src="script.js"></script>
 
-      <!-- left column: cards grid -->
-      <div class="col col-lg">
-        <div class="card ai-card">
-          <div class="card-header">
-            <h3>AI Decisions (recent)</h3>
-            <div class="mini-chip">Edge</div>
-          </div>
-          <ul class="ai-log" id="aiLog">
-            <li><strong>—</strong> No events yet</li>
-          </ul>
-        </div>
-
-        <div class="card devices-card">
-          <h3>Connected Devices</h3>
-          <div class="device-grid">
-            <div class="device">
-              <div class="dev-icon">📡</div>
-              <div class="dev-info"><strong>ESP Node 1</strong><small>Kitchen</small></div>
-            </div>
-            <div class="device">
-              <div class="dev-icon">🔌</div>
-              <div class="dev-info"><strong>Relay 3</strong><small>Living</small></div>
-            </div>
-            <div class="device">
-              <div class="dev-icon">🌡️</div>
-              <div class="dev-info"><strong>BME680</strong><small>Hall</small></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- right column: event feed + project info -->
-      <div class="col col-md">
-        <div class="card events-card">
-          <div class="card-header"><h3>Alerts & Events</h3></div>
-          <div id="eventsFeed" class="events-feed">
-            <div class="event empty">No active alerts</div>
-          </div>
-        </div>
-
-        <!-- Project info / docs panel (pop-out) -->
-        <div id="project-info" class="project-info small">
-          <button id="infoToggle" class="info-toggle">About this Project ▸</button>
-          <div id="infoCard" class="info-card hidden">
-            <h2>AI-Driven Smart Home — Quick Summary</h2>
-            <p id="docOverview">Loading project summary…</p>
-            <div class="info-grid">
-              <div class="info-mini">
-                <h4>Key Features</h4>
-                <ul id="docFeatures"></ul>
-              </div>
-              <div class="info-mini">
-                <h4>BOM highlights</h4>
-                <ul id="docBOM"></ul>
-              </div>
-            </div>
-            <div class="info-actions">
-              <a href="/mnt/data/AI_Driven_Smart_Home_Project_Documentation.pdf" target="_blank" class="btn">Open PDF</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ------------------ footer + controls ------------------ -->
-    <footer class="footer">
-      <div class="footer-left">
-        <small>Prototype • Demo-ready • Privacy-first</small>
-      </div>
-      <div class="footer-right">
-        <button id="demoGas" class="btn small">Simulate Gas Alert</button>
-        <button id="demoClean" class="btn small">Simulate Clean Request</button>
-      </div>
-    </footer>
-
-  </main>
-
-  <!-- ------------------ micro-accessible live announcer (visually hidden) ------------------ -->
-  <div aria-live="polite" id="ariaAnnouncements" class="sr-only"></div>
-
-  <!-- ------------------ end body ------------------ -->
 </body>
 </html>
